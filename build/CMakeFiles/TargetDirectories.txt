@@ -1,4 +1,0 @@
-/home/energyc0/programming/C-graphs/build/CMakeFiles/graph.dir
-/home/energyc0/programming/C-graphs/build/CMakeFiles/graphs.dir
-/home/energyc0/programming/C-graphs/build/CMakeFiles/edit_cache.dir
-/home/energyc0/programming/C-graphs/build/CMakeFiles/rebuild_cache.dir
