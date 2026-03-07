@@ -28,9 +28,7 @@ int main(int argc, char** argv)
 		return 1;
 	}
 	char* fileName = argv[1];
-	printf("before read\n");
 	Graph* graph = graphRead(fileName);
-	printf("after read\n");
 	printf("%d\n", graphSize(graph));
 	graphPrint(graph);
 	// graphFree(&graph);

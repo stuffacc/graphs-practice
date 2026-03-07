@@ -31,16 +31,14 @@ Graph* graphRead(const char* filename)
     }
 
     VertexList* newVertices = reallocList(graph->vertices, graph->size);
-    memset(newVertices, 0, graph->size * sizeof(VertexList));
-    newVertices->count = graph->size;
     if (newVertices == NULL) {
         graphFree(&graph);
         return NULL;
     }
+    memset(newVertices, 0, graph->size * sizeof(VertexList));
     graph->vertices = newVertices;
 
-    unsigned idx = 0;
-    while (!feof(file)) {
+    for (unsigned idx = 0; idx < graph->size; idx++) {
         VertexList* list = &graph->vertices[idx];
         if (!reallocNeighbours(list, graph->size)) {
             graphFree(&graph);
@@ -50,7 +48,6 @@ Graph* graphRead(const char* filename)
         for (unsigned j = 0; j < graph->size; j++) {
             fscanf(file, "%u", &list->vertices[j]);
         }
-	idx++;
     }
 
     return graph;
@@ -70,7 +67,7 @@ static bool reallocNeighbours(VertexList* list, unsigned count)
 
     list->vertices = vertices;
     list->count = count;
-    return list;
+    return true;
 }
 
 static void listFree(Graph* graph)
