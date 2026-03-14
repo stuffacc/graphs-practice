@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <string.h>
 #include "graph.h"
 
 typedef struct Graph {
@@ -10,7 +11,7 @@ static VertexList* reallocList(VertexList* list, unsigned size);
 static bool reallocNeighbours(VertexList* list, unsigned count);
 static void listFree(Graph* graph);
 
-Graph* graphCreate()
+Graph* graphCreate(void)
 {
     return calloc(1, sizeof(Graph));
 }
@@ -34,10 +35,10 @@ Graph* graphRead(const char* filename)
         graphFree(&graph);
         return NULL;
     }
+    memset(newVertices, 0, graph->size * sizeof(VertexList));
     graph->vertices = newVertices;
 
-    unsigned idx = 0;
-    while (feof(file)) {
+    for (unsigned idx = 0; idx < graph->size; idx++) {
         VertexList* list = &graph->vertices[idx];
         if (!reallocNeighbours(list, graph->size)) {
             graphFree(&graph);
@@ -47,7 +48,6 @@ Graph* graphRead(const char* filename)
         for (unsigned j = 0; j < graph->size; j++) {
             fscanf(file, "%u", &list->vertices[j]);
         }
-
     }
 
     return graph;
@@ -67,7 +67,7 @@ static bool reallocNeighbours(VertexList* list, unsigned count)
 
     list->vertices = vertices;
     list->count = count;
-    return list;
+    return true;
 }
 
 static void listFree(Graph* graph)
@@ -80,4 +80,26 @@ static void listFree(Graph* graph)
     free(graph->vertices);
     graph->vertices = NULL;
     graph->size = 0;
+}
+
+unsigned graphSize(Graph* graph)
+{
+	return graph->size;
+}
+
+void graphFree(Graph** graph)
+{
+	listFree(*graph);
+	free(*graph);
+	*graph = NULL;
+}
+
+VertexList graphGetNeighbours(Graph *graph, unsigned int vertex, bool *err) {
+	if (vertex >= graph->size) {
+		VertexList list = { NULL, 0 };
+		*err = true;
+		return list;
+	}
+	*err = false;
+	return graph->vertices[vertex];
 }
